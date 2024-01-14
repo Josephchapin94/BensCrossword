@@ -37,7 +37,7 @@ class CrosswordGenerator:
     def create_pdf(self, filename):
         pdf = FPDF()
         pdf.add_page()
-        pdf.set_font('Arial', size=12)
+        pdf.set_font('Arial', size=13)
 
         # Add crossword grid to PDF
         pdf.cell(200, 6, txt="Crossword Puzzle:", ln=True)
