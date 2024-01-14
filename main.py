@@ -65,7 +65,7 @@ def prompt_for_words():
     return words
 
 # Example usage
-generator = CrosswordGenerator(size=10)
+generator = CrosswordGenerator(size=20)
 words_to_add = prompt_for_words()
 for word in words_to_add:
     if not generator.add_word(word):
