@@ -34,22 +34,30 @@ class CrosswordGenerator:
                 if self.grid[i][j] == ' ':
                     self.grid[i][j] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
-    def create_pdf(self, filename):
+    def create_pdf(self, filename, text):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font('Arial', size=13)
+        
+         # Get the width of the text
+        text_width = pdf.get_string_width(text)
 
-        # Add crossword grid to PDF
-        pdf.cell(200, 6, txt="Crossword Puzzle:", ln=True)
+        # Calculate the x-coordinate to center the text
+        x_coordinate = (pdf.w - text_width) / 2
+
+        # Set the x-coordinate and add the centered text to the PDF
+        pdf.set_x(x_coordinate)
+        pdf.cell(0, 10, text, ln=True)
+
+        # Add crossword grid and key (these lines now also use centered text)
+        pdf.cell(0, 6, ln=True, align='C')
         for row in self.grid:
             line = ' '.join(row)
-            pdf.cell(200, 6, txt=line, ln=True)
-
-        # Add key to PDF
-        pdf.cell(200, 6, txt="Key:", ln=True)
+            pdf.cell(0, 6, txt=line, ln=True, align='C')
+        pdf.cell(0, 6, txt="Key:", ln=True, align='C')
         for word in self.words:
-            pdf.cell(200, 6, txt=word, ln=True)
-
+            pdf.cell(0, 6, txt=word, ln=True, align='C')
+    
         pdf.output(filename)
 
 # Prompt user for words
@@ -71,4 +79,4 @@ for word in words_to_add:
     if not generator.add_word(word):
         print(f"Warning: Couldn't place the word '{word}' in the puzzle.")
 generator.fill_empty_spaces()
-generator.create_pdf("crossword.pdf")
+generator.create_pdf("crossword.pdf", "Crossword Puzzle:" )
