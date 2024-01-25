@@ -11,21 +11,42 @@ class CrosswordGenerator:
         word = word.upper()
         for _ in range(100):  # Try 100 times to place the word
             row = random.randint(0, self.size - 1)
-            col = random.randint(0, self.size - len(word))
-            if self.can_place_word(word, row, col):
-                self.place_word(word, row, col)
+            col = random.randint(0, self.size - 1)
+            direction = random.choice(['horizontal', 'vertical'])
+
+            if direction == 'horizontal' and self.can_place_word_horizontal(word, row, col):
+                self.place_word_horizontal(word, row, col)
                 return True
+            elif direction == 'vertical' and self.can_place_word_vertical(word, row, col):
+                self.place_word_vertical(word, row, col)
+                return True
+
         return False
 
-    def can_place_word(self, word, row, col):
+    def can_place_word_horizontal(self, word, row, col):
+        if col + len(word) > self.size:
+            return False
         for i in range(len(word)):
             if self.grid[row][col + i] not in (' ', word[i]):
                 return False
         return True
 
-    def place_word(self, word, row, col):
+    def can_place_word_vertical(self, word, row, col):
+        if row + len(word) > self.size:
+            return False
+        for i in range(len(word)):
+            if self.grid[row + i][col] not in (' ', word[i]):
+                return False
+        return True
+
+    def place_word_horizontal(self, word, row, col):
         for i in range(len(word)):
             self.grid[row][col + i] = word[i]
+        self.words.append(word)
+
+    def place_word_vertical(self, word, row, col):
+        for i in range(len(word)):
+            self.grid[row + i][col] = word[i]
         self.words.append(word)
 
     def fill_empty_spaces(self):
